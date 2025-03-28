@@ -11,15 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
-use EasyCorp\Bundle\EasyAdminBundle\Config\UserInterface;
 use App\Entity\Utilisateur;
 use App\Entity\Enseigne;
 use App\Entity\User;
 use App\Entity\Categorie;
 use App\Entity\Horaire;
 
-use Symfony\Component\Security\Core\User\UserInterface; // Correct import
-use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu; // Add this if missing
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 
