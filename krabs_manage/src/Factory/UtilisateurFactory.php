@@ -3,22 +3,20 @@
 namespace App\Factory;
 
 use App\Entity\Utilisateur;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
-use Zenstruck\Foundry\Persistence\Proxy;
-use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
+use App\Entity\Enseigne;  // Add this import
 
 /**
  * @extends PersistentProxyObjectFactory<Utilisateur>
  */
-final class UtilisateurFactory extends PersistentProxyObjectFactory{
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
-    public function __construct()
+final class UtilisateurFactory extends PersistentProxyObjectFactory
+{
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
+        $this->entityManager = $entityManager;
     }
 
     public static function class(): string
@@ -26,37 +24,39 @@ final class UtilisateurFactory extends PersistentProxyObjectFactory{
         return Utilisateur::class;
     }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
-     */
     protected function defaults(): array|callable
-{
-    return [
-        'age' => self::faker()->numberBetween(18, 90),
-        'email' => self::faker()->unique()->email(),
-        'nom' => self::faker()->lastName(),
-        'password' => faker()->text(255), // À adapter avec votre système de hash
-        'prenom' => self::faker()->firstName(),
-        'numeroTelephone' => self::faker()->e164PhoneNumber(),
-        'photoProfil' => self::faker()->imageUrl(640, 480, 'people'),
-    ];
-}
+    {
+        return [
+            'age' => self::faker()->numberBetween(18, 90),
+            'email' => self::faker()->unique()->safeEmail(),
+            'nom' => self::faker()->lastName(),
+            'password' => 'password',
+            'prenom' => self::faker()->firstName(),
+            'numeroTelephone' => self::faker()->e164PhoneNumber(),
+            'photoProfil' => self::faker()->imageUrl(640, 480, 'people'),
+        ];
+    }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
-     */
     protected function initialize(): static
-{
-    return $this
-        ->afterInstantiate(function(Utilisateur $utilisateur): void {
-            // Ajout d'enseignes favorites
-            $enseignes = EnseigneFactory::new()->many(3, 5);
-            foreach ($enseignes as $enseigne) {
-                $utilisateur->addEnseignesFavorite($enseigne);
-            }
-        })
-    ;
-}
+    {
+        return $this
+            ->afterInstantiate(function(Utilisateur $utilisateur): void {
+                // Fetch existing Enseigne entities instead of creating new ones
+                $enseignes = $this->entityManager->getRepository(Enseigne::class)->findBy([], null, 3);
+                
+                // If not enough existing entities, create some
+                if (count($enseignes) < 3) {
+                    $enseignes = array_merge(
+                        $enseignes, 
+                        EnseigneFactory::createMany(3 - count($enseignes))
+                    );
+                }
+                
+                // Add existing or newly created Enseigne entities
+                foreach ($enseignes as $enseigne) {
+                    $utilisateur->addEnseignesFavorite($enseigne);
+                }
+            })
+        ;
+    }
 }

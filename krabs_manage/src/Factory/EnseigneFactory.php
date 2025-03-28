@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Factory;
 
 use App\Entity\Enseigne;
@@ -11,26 +10,13 @@ use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 /**
  * @extends PersistentProxyObjectFactory<Enseigne>
  */
-final class EnseigneFactory extends PersistentProxyObjectFactory{
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
-    public function __construct()
-    {
-    }
-
+final class EnseigneFactory extends PersistentProxyObjectFactory
+{
     public static function class(): string
     {
         return Enseigne::class;
     }
 
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
-     *
-     * @todo add your default values here
-     */
     protected function defaults(): array|callable
     {
         return [
@@ -44,17 +30,14 @@ final class EnseigneFactory extends PersistentProxyObjectFactory{
         ];
     }
     
-
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
-     */
     protected function initialize(): static
 {
     return $this
         ->afterInstantiate(function(Enseigne $enseigne): void {
-            // Ajout de catégories
-            $categories = CategorieFactory::new()->many(2, 4);
-            foreach ($categories as $categorie) {
+            // Create between 2 and 4 categories
+            $categories = CategorieFactory::createMany(self::faker()->numberBetween(2, 4));
+            foreach ($categories as $categorieProxy) {
+                $categorie = $categorieProxy->_real();
                 $enseigne->addCategory($categorie);
             }
         })

@@ -18,12 +18,12 @@ class AppFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-        CategorieFactory:createMany(10);
-        EnseigneFactory:createMany(10);
-        UtilisateurFactory:createMany(10);
-        NotationFactory:createMany(10);
-        HoraireFactory:createMany(10);
-        UserFactory:createMany(1);
+        CategorieFactory::createMany(10);
+        EnseigneFactory::createMany(10);
+        UtilisateurFactory::createMany(10);
+        NotationFactory::createMany(10);
+        HoraireFactory::createMany(10);
+        UserFactory::createMany(1);
 
         $manager->flush();
     }
