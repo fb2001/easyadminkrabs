@@ -16,6 +16,7 @@ use App\Entity\Enseigne;
 use App\Entity\User;
 use App\Entity\Categorie;
 use App\Entity\Horaire;
+use App\Entity\Notation;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -25,9 +26,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
+#[IsGranted('ROLE_ADMIN')]
 class DashboardController extends AbstractDashboardController
 {
-    public function index(): Response
+#[Route('/admin',name:'dashboard')]    
+public function index(): Response
     {
         return parent::index();
 
@@ -66,7 +69,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Enseigne', 'fas fa-list', Enseigne::class);
         yield MenuItem::linkToCrud('Categorie', 'fas fa-list', Categorie::class);
         yield MenuItem::linkToCrud('Horaire', 'fas fa-list', Horaire::class);
-        yield MenuItem::linkToCrud('Notation', 'fas fa-list', Notation::class);
+      //  yield MenuItem::linkToCrud('Notation', 'fas fa-list', Notation::class);
+        yield MenuItem::linkToCrud('Notations', 'fas fa-list', Notation::class);
 
 
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
