@@ -37,16 +37,16 @@ class Enseigne
     #[ORM\Column(length: 255)]
     private string $gpsLocation;
 
-    #[ORM\OneToMany(targetEntity: Horaire::class, mappedBy: 'enseigne')]
+    #[ORM\OneToMany(targetEntity: Horaire::class, mappedBy: 'enseigne', cascade: ['persist', 'remove'])]
     private Collection $horaires;
 
-    #[ORM\OneToMany(targetEntity: Notation::class, mappedBy: 'enseigne')]
+    #[ORM\OneToMany(targetEntity: Notation::class, mappedBy: 'enseigne', cascade: ['persist', 'remove'])]
     private Collection $notations;
 
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'enseignes')]
     private Collection $categories;
 
-    #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'enseignesFavorites')]
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'enseignesFavorites')]
     private Collection $favoris;
 
     public function __construct()
@@ -242,6 +242,8 @@ class Enseigne
     {
         if (!$this->favoris->contains($utilisateur)) {
             $this->favoris->add($utilisateur);
+            // Ne pas appeler addEnseignesFavorite ici pour éviter les boucles infinies
+            // car cette méthode est appelée depuis Utilisateur::addEnseignesFavorite
         }
         return $this;
     }
@@ -249,6 +251,8 @@ class Enseigne
     public function removeFavori(Utilisateur $utilisateur): self
     {
         $this->favoris->removeElement($utilisateur);
+        // Ne pas appeler removeEnseignesFavorite ici pour éviter les boucles infinies
+        // car cette méthode est appelée depuis Utilisateur::removeEnseignesFavorite
         return $this;
     }
 }

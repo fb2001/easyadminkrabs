@@ -43,10 +43,14 @@ class Utilisateur
     #[ORM\ManyToMany(targetEntity: Enseigne::class, mappedBy: 'favoris')]
     private Collection $enseignesFavorites;
 
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'utilisateurs')]
+    private Collection $categories;
+
     public function __construct()
     {
         $this->notations = new ArrayCollection();
         $this->enseignesFavorites = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     // Getters et Setters
@@ -191,6 +195,31 @@ class Utilisateur
     {
         if ($this->enseignesFavorites->removeElement($enseigne)) {
             $enseigne->removeFavori($this);
+        }
+        return $this;
+    }
+    
+    /**
+     * @return Collection|Categorie[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Categorie $categorie): self
+    {
+        if (!$this->categories->contains($categorie)) {
+            $this->categories->add($categorie);
+            $categorie->addUtilisateur($this);
+        }
+        return $this;
+    }
+
+    public function removeCategory(Categorie $categorie): self
+    {
+        if ($this->categories->removeElement($categorie)) {
+            $categorie->removeUtilisateur($this);
         }
         return $this;
     }

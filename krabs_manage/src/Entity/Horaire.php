@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Enum\JourEnum;
@@ -24,7 +23,7 @@ class Horaire
 
     #[ORM\ManyToOne(targetEntity: Enseigne::class, inversedBy: 'horaires')]
     #[ORM\JoinColumn(nullable: false)]
-    private Enseigne $enseigne;
+    private ?Enseigne $enseigne = null;
 
     public function getId(): ?int
     {
@@ -64,12 +63,12 @@ class Horaire
         return $this;
     }
 
-    public function getEnseigne(): Enseigne
+    public function getEnseigne(): ?Enseigne
     {
         return $this->enseigne;
     }
 
-    public function setEnseigne(Enseigne $enseigne): self
+    public function setEnseigne(?Enseigne $enseigne): self
     {
         $this->enseigne = $enseigne;
         return $this;

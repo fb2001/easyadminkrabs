@@ -11,70 +11,63 @@ class Notation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'integer')]
-    private int $prix;
+    #[ORM\Column(type: 'float')]
+    private float $note;
 
-    #[ORM\Column(type: 'integer')]
-    private int $ambiance;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $commentaire = null;
 
-    #[ORM\Column(type: 'integer')]
-    private int $qualite;
-
-    #[ORM\Column(length: 255)]
-    private string $typeNotation;
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $dateCreation;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: 'notations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(targetEntity: Enseigne::class, inversedBy: 'notations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Enseigne $enseigne = null;
+
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPrix(): int
+    public function getNote(): float
     {
-        return $this->prix;
+        return $this->note;
     }
 
-    public function setPrix(int $prix): self
+    public function setNote(float $note): self
     {
-        $this->prix = $prix;
+        $this->note = $note;
         return $this;
     }
 
-    public function getAmbiance(): int
+    public function getCommentaire(): ?string
     {
-        return $this->ambiance;
+        return $this->commentaire;
     }
 
-    public function setAmbiance(int $ambiance): self
+    public function setCommentaire(?string $commentaire): self
     {
-        $this->ambiance = $ambiance;
+        $this->commentaire = $commentaire;
         return $this;
     }
 
-    public function getQualite(): int
+    public function getDateCreation(): \DateTimeInterface
     {
-        return $this->qualite;
+        return $this->dateCreation;
     }
 
-    public function setQualite(int $qualite): self
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
     {
-        $this->qualite = $qualite;
-        return $this;
-    }
-
-    public function getTypeNotation(): string
-    {
-        return $this->typeNotation;
-    }
-
-    public function setTypeNotation(string $typeNotation): self
-    {
-        $this->typeNotation = $typeNotation;
+        $this->dateCreation = $dateCreation;
         return $this;
     }
 

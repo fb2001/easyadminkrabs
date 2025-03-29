@@ -34,14 +34,15 @@ final class NotationFactory extends PersistentProxyObjectFactory{
     protected function defaults(): array|callable
 {
     return [
-        'ambiance' => self::faker()->numberBetween(1, 5),
-        'prix' => self::faker()->numberBetween(1, 5),
-        'qualite' => self::faker()->numberBetween(1, 5),
-        'typeNotation' => self::faker()->randomElement(['Restaurant', 'Bar', 'Café', 'Shop']),
-        'utilisateur' => UtilisateurFactory::new(),
-        'enseigne' => EnseigneFactory::new(),
+        'note' => self::faker()->randomFloat(1, 0, 5),  // Note entre 0 et 5 avec 1 décimale
+        'commentaire' => self::faker()->optional(0.7)->text(),  // 70% de chance davoi un commentaire
+        //'typeNotation' => self::faker()->randomElement(['Restaurant', 'Bar', 'Café', 'Shop']),
+        'utilisateur' => UtilisateurFactory::randomOrCreate(),
+        'enseigne' => EnseigneFactory::randomOrCreate(),
     ];
 }
+
+
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization

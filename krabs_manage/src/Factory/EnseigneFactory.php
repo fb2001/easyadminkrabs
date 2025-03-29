@@ -35,7 +35,7 @@ final class EnseigneFactory extends PersistentProxyObjectFactory
     return $this
         ->afterInstantiate(function(Enseigne $enseigne): void {
             // Create between 2 and 4 categories
-            $categories = CategorieFactory::createMany(self::faker()->numberBetween(2, 4));
+            $categories = CategorieFactory::randomOrCreate();
             foreach ($categories as $categorieProxy) {
                 $categorie = $categorieProxy->_real();
                 $enseigne->addCategory($categorie);

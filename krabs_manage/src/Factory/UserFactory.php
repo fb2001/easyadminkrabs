@@ -31,7 +31,7 @@ final class UserFactory extends PersistentProxyObjectFactory{
     {
         return [
             'email' => self::faker()->unique()->safeEmail(),
-            'roles' => ['ROLE_USER'],
+            'roles' => ['ROLE_ADMIN'],
             'password' => '$2y$13$w7usfxJhm1MP8qjT8TDNzOq.UuYWFuZszfwqX/agMwG8JeqWgacZ.',
             'username' => self::faker()->userName(),
             'locale' => self::faker()->randomElement(['en', 'fr', 'es']), // Add locale

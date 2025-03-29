@@ -38,7 +38,7 @@ public function __construct (Security $security)
     public function prePersist(LifecycleEventArgs $args): void
     {
     
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
 
         if (($entity instanceof User)) {
             $entity->setLocale('fr_FR');

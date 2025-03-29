@@ -23,8 +23,14 @@ class AppFixtures extends Fixture
         UtilisateurFactory::createMany(10);
         NotationFactory::createMany(10);
         HoraireFactory::createMany(10);
-        UserFactory::createMany(1);
-
+        UserFactory::createOne([
+            'email' => 'admin@krabsmanage.com',
+            'password' => '$2y$13$dkn4j/KI32MGg5jOSM20q.LvoJt8iioLxtSPzzzziD6VEiek2aa0i', // Votre hash
+            'roles' => ['ROLE_ADMIN'],
+            'username' => 'admin',
+            'locale' => 'fr_FR', // Format standard pour Symfony
+            'is_verified' => true
+        ]);
         $manager->flush();
     }
 }
