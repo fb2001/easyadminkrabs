@@ -37,7 +37,7 @@ class Utilisateur
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoProfil;
 
-    #[ORM\OneToMany(targetEntity: Notation::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Notation::class, mappedBy: 'utilisateur', cascade: ['remove'])]
     private Collection $notations;
 
     #[ORM\ManyToMany(targetEntity: Enseigne::class, mappedBy: 'favoris')]
